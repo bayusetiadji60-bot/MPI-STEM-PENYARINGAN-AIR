@@ -1,0 +1,6 @@
+{
+  "name": "Lab Maya IPA: Penyaringan Campuran",
+  "description": "Media pembelajaran interaktif berbasis STEM dan Lab Maya untuk topik Penyaringan Campuran (Filtrasi) IPA Kelas VII Fase D SMP Negeri 3 Besuki.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
