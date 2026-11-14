@@ -115,7 +115,7 @@ export const Stage0Identitas: React.FC<StageCommonProps> = ({
       <div className="space-y-5 p-5 pt-4 sm:p-7 sm:pt-5">
         <MascotGuide
           mood="happy"
-          message="Halo, aku Kak Saka! Isi nama lengkap, kelas, dan nomor absenmu terlebih dahulu agar seluruh hasil penyelidikan dan sertifikat akhir tercatat atas namamu."
+          message="Hai, aku Beri si Berang-Berang! Yuk santai aja, isi dulu nama lengkap, kelas, dan nomor absenmu supaya hasil eksperimen dan sertifikatmu tercatat rapi."
         />
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-12 lg:items-stretch">
           <div className="rounded-xl border border-teal-200/80 bg-gradient-to-br from-teal-50/75 via-white to-sky-50/60 p-4 lg:col-span-6">
@@ -296,7 +296,7 @@ export const Stage1Masalah: React.FC<StageCommonProps> = ({
       <div className="space-y-5 p-5 pt-4 sm:p-7 sm:pt-5">
       <MascotGuide
         mood="curious"
-        message="Putar video ilustrasi masalah atau bandingkan kondisi cuaca normal dan hujan deras, lalu tuliskan pertanyaan ilmiah serta dugaan awalmu di bawah!"
+        message="Santai dulu dan tonton video singkatnya, atau coba geser perbandingan cuaca normal dan hujan deras. Habis itu, tulis pertanyaan serta tebakan awalmu di bawah, ya!"
       />
       <ProblemVideoPlayer />
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-stretch">
@@ -800,7 +800,7 @@ export const Stage3LabMaya: React.FC<StageCommonProps> = ({
       <div className="space-y-5 p-5 pt-4 sm:p-7 sm:pt-5">
       <MascotGuide
         mood="explain"
-        message="Di Lab Maya kamu bisa mencoba Mode Bandingkan 2 Filter sekaligus, menguji efek penyumbatan lumpur (+1 Siklus), atau membuka Kaca Pembesar Mikroskopis. Jangan lupa rekam minimal 3 data percobaan!"
+        message="Seru nih! Di Lab Maya kamu boleh coba Mode Bandingkan 2 Filter, tes efek lumpur menumpuk, atau intip lewat Kaca Pembesar Mikroskopis. Santai aja, rekam minimal 3 percobaan berbeda, ya."
       />
       <div>
         <LabMayaCanvas
@@ -1114,7 +1114,7 @@ export const Stage4Analisis: React.FC<StageCommonProps> = ({
       <div className="space-y-5 p-5 pt-4 sm:p-7 sm:pt-5">
       <MascotGuide
         mood="explain"
-        message="Perhatikan grafik batang otomatis di bawah: periksa bagaimana batang biru (kejernihan) dan batang oranye (laju aliran) bergerak berlawanan saat pori makin kecil!"
+        message="Yuk kita lihat grafiknya bareng-bareng. Coba perhatikan batang biru untuk kejernihan dan batang oranye untuk kecepatan aliran, kelihatan banget bedanya kan!"
       />
       <div className="rounded-xl border border-sky-200/80 bg-gradient-to-br from-sky-50/70 via-white to-teal-50/50 p-4 text-sm text-slate-700">
         <div className="flex items-center gap-2 font-semibold text-slate-900">

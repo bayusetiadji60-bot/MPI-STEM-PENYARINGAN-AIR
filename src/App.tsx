@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { BookOpen, Check, Home, Lock, RotateCcw, Volume2, VolumeX } from 'lucide-react';
+import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import { LandingIntro } from './components/LandingIntro';
 import {
   Stage0Identitas,
@@ -123,6 +124,7 @@ export default function App() {
   const activeStageMeta = CURRICULUM_CONFIG.tahapan[state.currentStage];
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="min-h-screen bg-gradient-to-b from-sky-50/70 via-slate-50 to-teal-50/35 text-slate-900">
       {/* Top Bar 3 Zona */}
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -215,18 +217,33 @@ export default function App() {
       </header>
 
       <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
-        {showIntro ? (
-          <LandingIntro
-            hasProgress={Boolean(state.identitas.nama.trim() || state.completedStages.length > 0)}
-            savedName={state.identitas.nama}
-            currentStage={state.currentStage}
-            onEnterApp={() => {
-              setShowIntro(false);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-          />
-        ) : (
-          <>
+        <AnimatePresence mode="wait">
+          {showIntro ? (
+            <motion.div
+              key="intro-view"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <LandingIntro
+                hasProgress={Boolean(state.identitas.nama.trim() || state.completedStages.length > 0)}
+                savedName={state.identitas.nama}
+                currentStage={state.currentStage}
+                onEnterApp={() => {
+                  setShowIntro(false);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="workspace-view"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+            >
             {/* Metadata Konteks Kurikulum & Capaian Poin (Unboxed) */}
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600">
               <div className="flex flex-wrap items-center gap-2">
@@ -335,88 +352,99 @@ export default function App() {
           </div>
         </section>
 
-        {/* Konten Tahap Aktif */}
-        {state.currentStage === 0 && (
-          <Stage0Identitas
-            state={state}
-            updateState={updateState}
-            onNext={(val) => handleNextStage(0, val)}
-            onPrev={() => handlePrevStage(0)}
-            onNotify={notify}
-          />
-        )}
-        {state.currentStage === 1 && (
-          <Stage1Masalah
-            state={state}
-            updateState={updateState}
-            onNext={(val) => handleNextStage(1, val)}
-            onPrev={() => handlePrevStage(1)}
-            onNotify={notify}
-          />
-        )}
-        {state.currentStage === 2 && (
-          <Stage2Konsep
-            state={state}
-            updateState={updateState}
-            onNext={(val) => handleNextStage(2, val)}
-            onPrev={() => handlePrevStage(2)}
-            onNotify={notify}
-          />
-        )}
-        {state.currentStage === 3 && (
-          <Stage3LabMaya
-            state={state}
-            updateState={updateState}
-            onNext={(val) => handleNextStage(3, val)}
-            onPrev={() => handlePrevStage(3)}
-            onNotify={notify}
-          />
-        )}
-        {state.currentStage === 4 && (
-          <Stage4Analisis
-            state={state}
-            updateState={updateState}
-            onNext={(val) => handleNextStage(4, val)}
-            onPrev={() => handlePrevStage(4)}
-            onNotify={notify}
-          />
-        )}
-        {state.currentStage === 5 && (
-          <Stage5Rancang
-            state={state}
-            updateState={updateState}
-            onNext={(val) => handleNextStage(5, val)}
-            onPrev={() => handlePrevStage(5)}
-            onNotify={notify}
-          />
-        )}
-        {state.currentStage === 6 && (
-          <Stage6Kesimpulan
-            state={state}
-            updateState={updateState}
-            onNext={(val) => handleNextStage(6, val)}
-            onPrev={() => handlePrevStage(6)}
-            onNotify={notify}
-          />
-        )}
-        {state.currentStage === 7 && (
-          <Stage7Evaluasi
-            state={state}
-            updateState={updateState}
-            onNext={(val) => handleNextStage(7, val)}
-            onPrev={() => handlePrevStage(7)}
-            onNotify={notify}
-          />
-        )}
-        {state.currentStage === 8 && (
-          <Stage8Rekap
-            state={state}
-            onPrev={() => handlePrevStage(8)}
-            onNotify={notify}
-          />
-        )}
-          </>
-        )}
+        {/* Konten Tahap Aktif dengan Transisi Fade-In Halus */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`stage-${state.currentStage}`}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {state.currentStage === 0 && (
+              <Stage0Identitas
+                state={state}
+                updateState={updateState}
+                onNext={(val) => handleNextStage(0, val)}
+                onPrev={() => handlePrevStage(0)}
+                onNotify={notify}
+              />
+            )}
+            {state.currentStage === 1 && (
+              <Stage1Masalah
+                state={state}
+                updateState={updateState}
+                onNext={(val) => handleNextStage(1, val)}
+                onPrev={() => handlePrevStage(1)}
+                onNotify={notify}
+              />
+            )}
+            {state.currentStage === 2 && (
+              <Stage2Konsep
+                state={state}
+                updateState={updateState}
+                onNext={(val) => handleNextStage(2, val)}
+                onPrev={() => handlePrevStage(2)}
+                onNotify={notify}
+              />
+            )}
+            {state.currentStage === 3 && (
+              <Stage3LabMaya
+                state={state}
+                updateState={updateState}
+                onNext={(val) => handleNextStage(3, val)}
+                onPrev={() => handlePrevStage(3)}
+                onNotify={notify}
+              />
+            )}
+            {state.currentStage === 4 && (
+              <Stage4Analisis
+                state={state}
+                updateState={updateState}
+                onNext={(val) => handleNextStage(4, val)}
+                onPrev={() => handlePrevStage(4)}
+                onNotify={notify}
+              />
+            )}
+            {state.currentStage === 5 && (
+              <Stage5Rancang
+                state={state}
+                updateState={updateState}
+                onNext={(val) => handleNextStage(5, val)}
+                onPrev={() => handlePrevStage(5)}
+                onNotify={notify}
+              />
+            )}
+            {state.currentStage === 6 && (
+              <Stage6Kesimpulan
+                state={state}
+                updateState={updateState}
+                onNext={(val) => handleNextStage(6, val)}
+                onPrev={() => handlePrevStage(6)}
+                onNotify={notify}
+              />
+            )}
+            {state.currentStage === 7 && (
+              <Stage7Evaluasi
+                state={state}
+                updateState={updateState}
+                onNext={(val) => handleNextStage(7, val)}
+                onPrev={() => handlePrevStage(7)}
+                onNotify={notify}
+              />
+            )}
+            {state.currentStage === 8 && (
+              <Stage8Rekap
+                state={state}
+                onPrev={() => handlePrevStage(8)}
+                onNotify={notify}
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
 
       {/* Footer Bersih */}
@@ -534,5 +562,6 @@ export default function App() {
         </div>
       )}
     </div>
+    </MotionConfig>
   );
 }

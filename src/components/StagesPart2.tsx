@@ -146,7 +146,7 @@ export const Stage5Rancang: React.FC<StageCommonProps> = ({
       <div className="space-y-5 p-5 pt-4 sm:p-7 sm:pt-5">
       <MascotGuide
         mood={tahap5.hasilUji?.lolos ? 'celebrate' : 'explain'}
-        message="Rancang botol penyaring air darurat dengan menyusun bahan dari pori besar di atas hingga halus di bawah. Perhatikan juga target biaya hemat warga maksimal Rp 5.500!"
+        message="Sekarang giliranmu merakit botol penyaring air darurat! Susun bahannya dari yang berpori besar di atas sampai halus di bawah, dan usahakan biayanya hemat maksimal Rp 5.500, ya."
       />
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-12 lg:items-start">
         <div className="space-y-4 lg:col-span-4">
@@ -559,8 +559,8 @@ export const Stage7Evaluasi: React.FC<StageCommonProps> = ({
           mood={tahap7.score >= 80 ? 'celebrate' : 'happy'}
           message={
             tahap7.score >= 80
-              ? `Hebat! Skor evaluasimu ${tahap7.score}/100. Kamu sudah menguasai konsep penyaringan campuran dan siap mencetak sertifikat serta laporan PDF!`
-              : `Skor evaluasimu ${tahap7.score}/100. Baca pembahasan setiap soal di bawah agar makin mantap sebelum mengunduh laporan.`
+              ? `Keren banget! Nilai evaluasimu ${tahap7.score} dari 100. Kamu sudah paham konsep penyaringan campuran dan siap ambil sertifikatmu!`
+              : `Nilai evaluasimu ${tahap7.score} dari 100. Santai aja, yuk baca pembahasan tiap soal di bawah supaya makin paham sebelum unduh laporan.`
           }
         />
       )}
@@ -735,7 +735,7 @@ export const Stage8Rekap: React.FC<Omit<StageCommonProps, 'onNext' | 'updateStat
       <div className="space-y-5 p-5 pt-4 sm:p-7 sm:pt-5">
       <MascotGuide
         mood="celebrate"
-        message={`Luar biasa, ${identitas.nama || 'Peneliti Muda'}! Kamu telah menyelesaikan seluruh eksperimen Lab Maya dan merancang alat penjernih air "${tahap5.namaAlat || 'Filter Besuki'}".`}
+        message={`Yeay, selamat ya ${identitas.nama || 'Peneliti Muda'}! Kamu sudah menyelesaikan semua percobaan Lab Maya dan merancang alat "${tahap5.namaAlat || 'Filter Besuki'}". Air jadi bersih deh!`}
       />
 
       {/* Sertifikat Mini Peneliti Muda IPA */}

@@ -138,7 +138,28 @@ export function playErrorSound(enabled: boolean): void {
 }
 
 /**
- * Membacakan panduan tahap dengan Web Speech API berbahasa Indonesia.
+ * Memilih suara Bahasa Indonesia yang paling natural dari browser.
+ */
+function pickRelaxedIndonesianVoice(): SpeechSynthesisVoice | null {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return null;
+  const voices = window.speechSynthesis.getVoices();
+  if (!voices.length) return null;
+
+  const idVoices = voices.filter(
+    (v) =>
+      v.lang.toLowerCase().startsWith('id') ||
+      v.name.toLowerCase().includes('indonesia')
+  );
+  if (!idVoices.length) return null;
+
+  return (
+    idVoices.find((v) => /google|natural|gadis|damayanti|ardi/i.test(v.name)) ||
+    idVoices[0]
+  );
+}
+
+/**
+ * Membacakan panduan tahap dengan intonasi santai, tenang, dan ramah berbahasa Indonesia.
  */
 export function toggleIndonesianSpeech(
   text: string,
@@ -155,9 +176,15 @@ export function toggleIndonesianSpeech(
       return false;
     }
     const utter = new SpeechSynthesisUtterance(text);
+    const chosenVoice = pickRelaxedIndonesianVoice();
+    if (chosenVoice) {
+      utter.voice = chosenVoice;
+    }
     utter.lang = 'id-ID';
-    utter.rate = 0.98;
-    utter.pitch = 1.04;
+    // Tempo lebih santai & nada hangat agar terasa akrab dan tidak terburu-buru
+    utter.rate = 0.86;
+    utter.pitch = 0.96;
+    utter.volume = 0.95;
     utter.onend = onEnd;
     utter.onerror = onEnd;
     window.speechSynthesis.speak(utter);
