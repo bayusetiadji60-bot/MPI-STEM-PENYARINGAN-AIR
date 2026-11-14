@@ -9,6 +9,7 @@ import {
   Wrench,
 } from 'lucide-react';
 import { CURRICULUM_CONFIG } from '../data/curriculum';
+import heroWaterFiltrationImg from '../assets/images/hero_water_filtration_1794640166044.jpg';
 import { IllustrationFrame } from './IllustrationFrame';
 
 interface LandingIntroProps {
@@ -102,7 +103,7 @@ export const LandingIntro: React.FC<LandingIntroProps> = ({
 
           <div className="lg:col-span-6">
             <IllustrationFrame
-              src="/src/assets/images/hero_water_filtration_1794640166044.jpg"
+              src={heroWaterFiltrationImg}
               alt="Ilustrasi eksperimen laboratorium penyaringan air bertingkat dengan kerikil, pasir, arang aktif, dan kapas"
               caption="Simulasi proses pemisahan campuran heterogen menjadi air filtrat yang lebih jernih."
               aspectClass="aspect-video lg:h-full"

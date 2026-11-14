@@ -20,6 +20,9 @@ import {
   UserCheck,
 } from 'lucide-react';
 import { CURRICULUM_CONFIG } from '../data/curriculum';
+import diagramFiltrationImg from '../assets/images/diagram_filtration_components_1794640166947.jpg';
+import heroWaterFiltrationImg from '../assets/images/hero_water_filtration_1794640166044.jpg';
+import sceneBesukiRainImg from '../assets/images/scene_besuki_rain_1794640167145.jpg';
 import { AppState, LabTrial } from '../types/lkpd';
 import { getAnalysisStats } from '../utils/filtrationModel';
 import { AnalysisChart } from './AnalysisChart';
@@ -119,7 +122,7 @@ export const Stage0Identitas: React.FC<StageCommonProps> = ({
             </ul>
           </div>
           <IllustrationFrame
-            src="/src/assets/images/hero_water_filtration_1794640166044.jpg"
+            src={heroWaterFiltrationImg}
             alt="Ilustrasi eksperimen penyaringan air berlapis dengan kerikil, pasir halus, arang aktif, dan kapas"
             caption="Alat penyaring air bertingkat di laboratorium IPA untuk memisahkan kotoran dari air keruh."
             aspectClass="aspect-video lg:h-full"
@@ -286,7 +289,7 @@ export const Stage1Masalah: React.FC<StageCommonProps> = ({
       <ProblemVideoPlayer />
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-stretch">
         <IllustrationFrame
-          src="/src/assets/images/scene_besuki_rain_1794640167145.jpg"
+          src={sceneBesukiRainImg}
           alt="Ilustrasi saluran irigasi dan persawahan di pedesaan pesisir saat hujan deras membawa aliran air keruh"
           caption="Konteks lokal: aliran air irigasi berubah keruh saat hujan deras membawa partikel tanah dan daun."
           aspectClass="aspect-video lg:h-[238px]"
@@ -510,7 +513,7 @@ export const Stage2Konsep: React.FC<StageCommonProps> = ({
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-12 lg:items-start">
         <div className="lg:col-span-5">
           <IllustrationFrame
-            src="/src/assets/images/diagram_filtration_components_1794640166947.jpg"
+            src={diagramFiltrationImg}
             alt="Diagram penampang penyaringan dengan corong kaca, kertas saring penahan residu, dan filtrat jernih di labu Erlenmeyer"
             caption="Penampang proses filtrasi: partikel lumpur tertahan di penyaring (residu), sementara air jernih lolos ke bawah (filtrat)."
             aspectClass="aspect-video"

@@ -15,6 +15,7 @@ import {
   Wrench,
 } from 'lucide-react';
 import { CURRICULUM_CONFIG } from '../data/curriculum';
+import engineeringPrototypeImg from '../assets/images/engineering_filter_prototype_1794640167114.jpg';
 import {
   AppState,
   LayerBottomId,
@@ -137,7 +138,7 @@ export const Stage5Rancang: React.FC<StageCommonProps> = ({
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-12 lg:items-start">
         <div className="space-y-4 lg:col-span-5">
           <IllustrationFrame
-            src="/src/assets/images/engineering_filter_prototype_1794640167114.jpg"
+            src={engineeringPrototypeImg}
             alt="Ilustrasi prototipe penyaring air dari botol plastik berisi kerikil, pasir kasar, pasir halus, arang, dan kapas"
             caption="Contoh prototipe alat penyaring air sederhana bertingkat menggunakan botol bekas dan bahan alami."
             aspectClass="aspect-[4/3]"
