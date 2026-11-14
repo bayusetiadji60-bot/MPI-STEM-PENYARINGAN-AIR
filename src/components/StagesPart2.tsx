@@ -222,7 +222,7 @@ export const Stage5Rancang: React.FC<StageCommonProps> = ({
                 tahap5: { ...prev.tahap5, namaAlat: e.target.value },
               }));
             }}
-            className="min-h-[44px] w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+            className="min-h-[44px] w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-base sm:text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
           />
         </div>
 
@@ -242,7 +242,7 @@ export const Stage5Rancang: React.FC<StageCommonProps> = ({
                 tahap5: { ...prev.tahap5, alasan: e.target.value },
               }));
             }}
-            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-base sm:text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
           />
         </div>
 
@@ -263,7 +263,7 @@ export const Stage5Rancang: React.FC<StageCommonProps> = ({
                 tahap5: { ...prev.tahap5, prediksi: e.target.value },
               }));
             }}
-            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-base sm:text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
           />
         </div>
       </div>
@@ -381,7 +381,7 @@ export const Stage6Kesimpulan: React.FC<StageCommonProps> = ({
                 tahap6: { ...prev.tahap6, kesimpulan: e.target.value },
               }));
             }}
-            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-base sm:text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
           />
         </div>
 
@@ -402,7 +402,7 @@ export const Stage6Kesimpulan: React.FC<StageCommonProps> = ({
                 tahap6: { ...prev.tahap6, kehidupan: e.target.value },
               }));
             }}
-            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-base sm:text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
           />
         </div>
 
@@ -424,7 +424,7 @@ export const Stage6Kesimpulan: React.FC<StageCommonProps> = ({
                   tahap6: { ...prev.tahap6, dipahami: e.target.value },
                 }));
               }}
-              className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+              className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-base sm:text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
             />
           </div>
 
@@ -445,7 +445,7 @@ export const Stage6Kesimpulan: React.FC<StageCommonProps> = ({
                   tahap6: { ...prev.tahap6, membingungkan: e.target.value },
                 }));
               }}
-              className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+              className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-base sm:text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
             />
           </div>
         </div>
@@ -575,7 +575,7 @@ export const Stage7Evaluasi: React.FC<StageCommonProps> = ({
                 {q.opsi.map((op, i) => (
                   <label
                     key={i}
-                    className={`flex min-h-[42px] items-start gap-2.5 rounded-lg border bg-white px-3 py-2 text-sm text-slate-800 ${
+                    className={`flex min-h-[46px] items-start gap-2.5 rounded-lg border bg-white px-3 py-2.5 text-sm text-slate-800 ${
                       tahap7.submitted ? 'cursor-default' : 'cursor-pointer hover:border-sky-400'
                     } border-slate-200`}
                   >
@@ -812,7 +812,10 @@ export const Stage8Rekap: React.FC<Omit<StageCommonProps, 'onNext' | 'updateStat
             {tahap3.varTerikat} / {tahap3.varKontrol}
           </p>
 
-          <div className="mt-3 overflow-x-auto rounded-xl border border-slate-200">
+          <p className="mt-2 text-[11px] text-slate-500 sm:hidden">
+            Geser tabel ke samping untuk melihat seluruh kolom data.
+          </p>
+          <div className="mt-2 overflow-x-auto rounded-xl border border-slate-200">
             <table className="w-full min-w-[560px] border-collapse text-left text-xs">
               <thead>
                 <tr className="bg-slate-800 text-white">

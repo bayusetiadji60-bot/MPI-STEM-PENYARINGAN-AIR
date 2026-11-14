@@ -376,13 +376,13 @@ export const FiltrationProcessSvg: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2">
             {LAYER_DETAILS.map((item) => (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => setActiveLayer(item.id)}
-                className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-[11px] font-semibold transition-colors ${
+                className={`inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-semibold transition-colors ${
                   activeLayer === item.id
                     ? 'border-teal-700 bg-teal-700 text-white'
                     : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'

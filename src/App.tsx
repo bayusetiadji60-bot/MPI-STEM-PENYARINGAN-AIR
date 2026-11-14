@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BookOpen, Check, Home, Lock, RotateCcw, Volume2, VolumeX } from 'lucide-react';
+import { BookOpen, Check, Home, Lock, Monitor, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import { LandingIntro } from './components/LandingIntro';
 import {
@@ -34,10 +34,18 @@ export default function App() {
   const [toast, setToast] = useState<string | null>(null);
   const [showResetModal, setShowResetModal] = useState(false);
   const [showTeacherModal, setShowTeacherModal] = useState(false);
+  const [pidMode, setPidMode] = useState(false);
 
   useEffect(() => {
     persistState(state);
   }, [state]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('pid-mode', pidMode);
+    return () => {
+      document.documentElement.classList.remove('pid-mode');
+    };
+  }, [pidMode]);
 
   const notify = (msg: string) => {
     setToast(msg);
@@ -128,7 +136,7 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-b from-sky-50/70 via-slate-50 to-teal-50/35 text-slate-900">
       {/* Top Bar 3 Zona */}
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-8 px-4 py-3 sm:px-6">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5 sm:gap-8 sm:px-6 2xl:max-w-7xl">
           {/* Zona 1: Brand Wordmark Tunggal */}
           <button
             type="button"
@@ -207,7 +215,7 @@ export default function App() {
             <button
               type="button"
               onClick={() => setShowResetModal(true)}
-              className="inline-flex min-h-[38px] items-center gap-1.5 whitespace-nowrap shrink-0 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100"
+              className="inline-flex min-h-[40px] items-center gap-1.5 whitespace-nowrap shrink-0 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               Mulai Ulang
@@ -216,7 +224,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
+      <main className="mx-auto max-w-6xl px-3.5 py-5 sm:px-6 sm:py-6 2xl:max-w-7xl">
         <AnimatePresence mode="wait">
           {showIntro ? (
             <motion.div
@@ -267,7 +275,7 @@ export default function App() {
                 <span aria-hidden="true">·</span>
                 <span>{CURRICULUM_CONFIG.durasi}</span>
               </div>
-              <div className="font-mono-num flex items-center gap-3 font-semibold text-slate-800">
+              <div className="font-mono-num flex flex-wrap items-center gap-3 font-semibold text-slate-800">
                 <span>{state.points} Poin</span>
                 <span aria-hidden="true">·</span>
                 <span>
@@ -279,7 +287,7 @@ export default function App() {
                   onClick={() =>
                     setState((prev) => ({ ...prev, soundEnabled: !prev.soundEnabled }))
                   }
-                  className="inline-flex items-center gap-1 font-sans text-xs font-semibold text-teal-800 hover:underline"
+                  className="inline-flex min-h-[36px] items-center gap-1 font-sans text-xs font-semibold text-teal-800 hover:underline"
                   title="Aktifkan atau bisukan efek suara simulasi"
                 >
                   {state.soundEnabled ? (
@@ -294,13 +302,30 @@ export default function App() {
                     </>
                   )}
                 </button>
+                <span aria-hidden="true" className="hidden md:inline">·</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPidMode((prev) => !prev);
+                    notify(
+                      !pidMode
+                        ? 'Mode PID Layar Besar aktif — teks & tombol diperbesar'
+                        : 'Mode Tampilan Standar aktif'
+                    );
+                  }}
+                  className="hidden min-h-[36px] items-center gap-1 font-sans text-xs font-semibold text-sky-800 hover:underline md:inline-flex"
+                  title="Perbesar skala tampilan untuk Papan Interaktif Digital (PID) di kelas"
+                >
+                  <Monitor className="h-3.5 w-3.5" />
+                  <span>{pidMode ? 'Mode PID Aktif' : 'Mode Layar PID'}</span>
+                </button>
               </div>
             </div>
 
             {/* Stepper & Progress Bar */}
             <section
           aria-label="Penanda Progres Pembelajaran"
-          className="mb-6 rounded-2xl border border-slate-200 bg-gradient-to-br from-white via-white to-sky-50/40 p-4"
+          className="mb-5 rounded-2xl border border-slate-200 bg-gradient-to-br from-white via-white to-sky-50/40 p-3.5 sm:mb-6 sm:p-4"
         >
           <div className="mb-2 flex items-center justify-between text-xs font-bold text-slate-700 sm:text-sm">
             <span>
@@ -316,7 +341,7 @@ export default function App() {
             />
           </div>
 
-          <div className="flex gap-1.5 overflow-x-auto pb-1">
+          <div className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1">
             {CURRICULUM_CONFIG.tahapan.map((t) => {
               const isActive = t.id === state.currentStage;
               const isDone = state.completedStages.includes(t.id);
@@ -333,7 +358,7 @@ export default function App() {
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
                   }}
-                  className={`inline-flex min-h-[36px] shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                  className={`inline-flex min-h-[44px] snap-start shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl border px-3.5 py-2 text-xs font-semibold transition-colors ${
                     isActive
                       ? 'border-teal-800 bg-teal-700 text-white'
                       : isDone
@@ -448,14 +473,14 @@ export default function App() {
       </main>
 
       {/* Footer Bersih */}
-      <footer className="mx-auto mt-4 flex max-w-5xl flex-wrap items-center justify-between gap-2 border-t border-slate-200 px-4 py-5 text-xs text-slate-500 sm:px-6">
+      <footer className="mx-auto mt-4 flex max-w-6xl flex-wrap items-center justify-between gap-2 border-t border-slate-200 px-4 pt-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] text-xs text-slate-500 sm:px-6 2xl:max-w-7xl">
         <span>
           Media Pembelajaran Interaktif STEM + Lab Maya · {CURRICULUM_CONFIG.sekolah}
         </span>
         <button
           type="button"
           onClick={() => setShowTeacherModal(true)}
-          className="inline-flex items-center gap-1.5 font-semibold text-teal-800 hover:underline"
+          className="inline-flex min-h-[44px] items-center gap-1.5 font-semibold text-teal-800 hover:underline"
         >
           <BookOpen className="h-3.5 w-3.5" />
           Panduan Guru

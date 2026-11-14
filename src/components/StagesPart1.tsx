@@ -648,7 +648,7 @@ export const Stage2Konsep: React.FC<StageCommonProps> = ({
                   {q.opsi.map((op, i) => (
                     <label
                       key={i}
-                      className="flex min-h-[42px] cursor-pointer items-start gap-2.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 hover:border-sky-400 hover:bg-sky-50/40"
+                      className="flex min-h-[46px] cursor-pointer items-start gap-2.5 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 hover:border-sky-400 hover:bg-sky-50/40"
                     >
                       <input
                         type="radio"
@@ -844,6 +844,9 @@ export const Stage3LabMaya: React.FC<StageCommonProps> = ({
           </span>
         </div>
 
+        <p className="mb-1.5 text-[11px] text-slate-500 sm:hidden">
+          Geser tabel ke samping untuk melihat semua kolom.
+        </p>
         <div className="overflow-x-auto rounded-xl border border-slate-200">
           <table className="w-full min-w-[680px] border-collapse text-left text-sm">
             <thead>
@@ -915,7 +918,7 @@ export const Stage3LabMaya: React.FC<StageCommonProps> = ({
                             },
                           }))
                         }
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-red-200 text-red-600 hover:bg-red-50"
+                        className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-red-200 text-red-600 hover:bg-red-50"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
@@ -951,7 +954,7 @@ export const Stage3LabMaya: React.FC<StageCommonProps> = ({
                   tahap3: { ...prev.tahap3, varBebas: e.target.value },
                 }));
               }}
-              className="min-h-[44px] w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+              className="min-h-[44px] w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-base sm:text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
             />
           </div>
           <div>
@@ -970,7 +973,7 @@ export const Stage3LabMaya: React.FC<StageCommonProps> = ({
                   tahap3: { ...prev.tahap3, varTerikat: e.target.value },
                 }));
               }}
-              className="min-h-[44px] w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+              className="min-h-[44px] w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-base sm:text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
             />
           </div>
         </div>
@@ -990,7 +993,7 @@ export const Stage3LabMaya: React.FC<StageCommonProps> = ({
                 tahap3: { ...prev.tahap3, varKontrol: e.target.value },
               }));
             }}
-            className="min-h-[44px] w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+            className="min-h-[44px] w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-base sm:text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
           />
         </div>
       </div>
@@ -1184,7 +1187,7 @@ export const Stage4Analisis: React.FC<StageCommonProps> = ({
                   tahap4: { ...prev.tahap4, hitungRataLaju: e.target.value },
                 }));
               }}
-              className="font-mono-num min-h-[44px] w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+              className="font-mono-num min-h-[44px] w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-base sm:text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
             />
           </div>
           <div>
@@ -1204,14 +1207,14 @@ export const Stage4Analisis: React.FC<StageCommonProps> = ({
                   tahap4: { ...prev.tahap4, hitungRataJernih: e.target.value },
                 }));
               }}
-              className="font-mono-num min-h-[44px] w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+              className="font-mono-num min-h-[44px] w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-base sm:text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
             />
           </div>
         </div>
         <button
           type="button"
           onClick={handleCheckCalc}
-          className="mt-3 inline-flex min-h-[42px] items-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-xs font-semibold text-white hover:bg-sky-700"
+          className="mt-3 inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-xs font-semibold text-white hover:bg-sky-700"
         >
           <Calculator className="h-4 w-4" />
           Periksa Hitungan Saya
@@ -1246,7 +1249,7 @@ export const Stage4Analisis: React.FC<StageCommonProps> = ({
                 tahap4: { ...prev.tahap4, interpretasi: e.target.value },
               }));
             }}
-            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-base sm:text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
           />
         </div>
 
@@ -1267,7 +1270,7 @@ export const Stage4Analisis: React.FC<StageCommonProps> = ({
                 tahap4: { ...prev.tahap4, pola: e.target.value },
               }));
             }}
-            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+            className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-base sm:text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
           />
         </div>
       </div>

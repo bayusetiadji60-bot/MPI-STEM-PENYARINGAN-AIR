@@ -191,7 +191,7 @@ export const BottleFilterBuilder: React.FC<BottleFilterBuilderProps> = ({
             <p className="mb-1.5 text-xs font-bold text-slate-800">
               1. Lapisan Atas (Penyaring Awal Lumpur Kasar)
             </p>
-            <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               {TOP_OPTIONS.map((opt) => {
                 const active = lapisanAtas === opt.id;
                 return (
@@ -199,7 +199,7 @@ export const BottleFilterBuilder: React.FC<BottleFilterBuilderProps> = ({
                     key={opt.id}
                     type="button"
                     onClick={() => onChangeTop(opt.id)}
-                    className={`rounded-lg border px-2.5 py-2 text-left text-xs transition-colors ${
+                    className={`min-h-[54px] rounded-lg border px-3 py-2 text-left text-xs transition-colors ${
                       active
                         ? 'border-teal-700 bg-teal-700 text-white'
                         : 'border-slate-200 bg-white text-slate-800 hover:border-teal-500'
@@ -220,7 +220,7 @@ export const BottleFilterBuilder: React.FC<BottleFilterBuilderProps> = ({
             <p className="mb-1.5 text-xs font-bold text-slate-800">
               2. Lapisan Tengah (Penahan Pasir & Partikel Sedang)
             </p>
-            <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               {MID_OPTIONS.map((opt) => {
                 const active = lapisanTengah === opt.id;
                 return (
@@ -228,7 +228,7 @@ export const BottleFilterBuilder: React.FC<BottleFilterBuilderProps> = ({
                     key={opt.id}
                     type="button"
                     onClick={() => onChangeMid(opt.id)}
-                    className={`rounded-lg border px-2.5 py-2 text-left text-xs transition-colors ${
+                    className={`min-h-[54px] rounded-lg border px-3 py-2 text-left text-xs transition-colors ${
                       active
                         ? 'border-teal-700 bg-teal-700 text-white'
                         : 'border-slate-200 bg-white text-slate-800 hover:border-teal-500'
@@ -249,7 +249,7 @@ export const BottleFilterBuilder: React.FC<BottleFilterBuilderProps> = ({
             <p className="mb-1.5 text-xs font-bold text-slate-800">
               3. Lapisan Bawah (Penyaring Halus & Penyerap Bau)
             </p>
-            <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               {BOTTOM_OPTIONS.map((opt) => {
                 const active = lapisanBawah === opt.id;
                 return (
@@ -257,7 +257,7 @@ export const BottleFilterBuilder: React.FC<BottleFilterBuilderProps> = ({
                     key={opt.id}
                     type="button"
                     onClick={() => onChangeBottom(opt.id)}
-                    className={`rounded-lg border px-2.5 py-2 text-left text-xs transition-colors ${
+                    className={`min-h-[54px] rounded-lg border px-3 py-2 text-left text-xs transition-colors ${
                       active
                         ? 'border-teal-700 bg-teal-700 text-white'
                         : 'border-slate-200 bg-white text-slate-800 hover:border-teal-500'

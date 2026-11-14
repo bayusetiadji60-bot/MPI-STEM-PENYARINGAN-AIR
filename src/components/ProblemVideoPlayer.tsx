@@ -535,7 +535,7 @@ export const ProblemVideoPlayer: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setAudioEnabled((prev) => !prev)}
-                className={`inline-flex min-h-[38px] items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition-colors ${
+                className={`inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
                   audioEnabled
                     ? 'border-teal-500 bg-teal-600/30 text-teal-200'
                     : 'border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700'
@@ -556,7 +556,7 @@ export const ProblemVideoPlayer: React.FC = () => {
             </div>
 
             {/* Tombol Loncat Babak */}
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {SCENES.map((sc) => {
                 const active = currentScene.id === sc.id;
                 return (
@@ -567,7 +567,7 @@ export const ProblemVideoPlayer: React.FC = () => {
                       lastSpokenSceneRef.current = -1;
                       setCurrentTime(sc.start + 0.05);
                     }}
-                    className={`rounded-md border px-2.5 py-1 text-[11px] font-semibold transition-colors ${
+                    className={`min-h-[40px] rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
                       active
                         ? 'border-sky-500 bg-sky-600/25 text-sky-200'
                         : 'border-slate-700 bg-slate-800/80 text-slate-400 hover:text-slate-200'
