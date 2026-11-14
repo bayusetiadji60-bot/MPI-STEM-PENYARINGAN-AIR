@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BookOpen, Check, Home, Lock, RotateCcw } from 'lucide-react';
+import { BookOpen, Check, Home, Lock, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 import { LandingIntro } from './components/LandingIntro';
 import {
   Stage0Identitas,
@@ -21,6 +21,11 @@ import {
   loadStoredState,
   persistState,
 } from './utils/filtrationModel';
+import {
+  playBadgeSound,
+  playErrorSound,
+  stopIndonesianSpeech,
+} from './utils/soundEffects';
 
 export default function App() {
   const [state, setState] = useState<AppState>(() => loadStoredState());
@@ -49,7 +54,12 @@ export default function App() {
 
   const handleNextStage = (stageId: number, validator: () => string | null) => {
     const err = validator();
-    if (err) return;
+    if (err) {
+      playErrorSound(state.soundEnabled);
+      return;
+    }
+
+    stopIndonesianSpeech();
 
     setState((prev) => {
       const alreadyDone = prev.completedStages.includes(stageId);
@@ -67,6 +77,7 @@ export default function App() {
           : completedStages;
 
       if (!alreadyDone) {
+        playBadgeSound(prev.soundEnabled);
         notify(`Lencana terbuka: ${CURRICULUM_CONFIG.tahapan[stageId].badge} (+15 Poin)`);
       }
 
@@ -83,6 +94,7 @@ export default function App() {
   };
 
   const handlePrevStage = (stageId: number) => {
+    stopIndonesianSpeech();
     setState((prev) => ({
       ...prev,
       currentStage: Math.max(0, stageId - 1),
@@ -244,6 +256,27 @@ export default function App() {
                 <span>
                   {state.completedStages.length} / {CURRICULUM_CONFIG.tahapan.length} Lencana
                 </span>
+                <span aria-hidden="true">·</span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setState((prev) => ({ ...prev, soundEnabled: !prev.soundEnabled }))
+                  }
+                  className="inline-flex items-center gap-1 font-sans text-xs font-semibold text-teal-800 hover:underline"
+                  title="Aktifkan atau bisukan efek suara simulasi"
+                >
+                  {state.soundEnabled ? (
+                    <>
+                      <Volume2 className="h-3.5 w-3.5" />
+                      <span>Suara Nyala</span>
+                    </>
+                  ) : (
+                    <>
+                      <VolumeX className="h-3.5 w-3.5 text-slate-500" />
+                      <span className="text-slate-500">Suara Bisu</span>
+                    </>
+                  )}
+                </button>
               </div>
             </div>
 

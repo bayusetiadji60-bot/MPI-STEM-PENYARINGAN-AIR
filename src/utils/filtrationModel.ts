@@ -23,7 +23,8 @@ import {
 export function calculateFiltrationModel(
   mediaId: MediaId,
   ketebalanCm: number,
-  kekeruhanId: TurbidityId
+  kekeruhanId: TurbidityId,
+  siklusPenyumbatan = 1
 ) {
   const media =
     CURRICULUM_CONFIG.mediaList.find((m) => m.id === mediaId) ||
@@ -33,8 +34,9 @@ export function calculateFiltrationModel(
     CURRICULUM_CONFIG.kekeruhanOptions[1];
 
   const factorL = 0.55 + ketebalanCm / 6.0;
-  const rawDebit = media.permeabilitas / factorL / kekeruhan.faktorHambat;
-  const debit = Math.max(0.8, Number(rawDebit.toFixed(2)));
+  const clogMultiplier = 1 + Math.max(0, siklusPenyumbatan - 1) * (kekeruhan.ntu >= 200 ? 0.28 : 0.18);
+  const rawDebit = media.permeabilitas / factorL / kekeruhan.faktorHambat / clogMultiplier;
+  const debit = Math.max(0.6, Number(rawDebit.toFixed(2)));
   const waktuDetik = Number((200 / debit).toFixed(1));
 
   const thicknessBonus = (ketebalanCm - 2) * 0.012;
@@ -46,6 +48,7 @@ export function calculateFiltrationModel(
     media,
     kekeruhan,
     ketebalanCm,
+    siklusPenyumbatan,
     ntuAwal: kekeruhan.ntu,
     waktuDetik,
     debit,
@@ -54,9 +57,15 @@ export function calculateFiltrationModel(
   };
 }
 
+export const LAYER_COSTS = {
+  top: { kerikil: 500, pasir_kasar: 600, kapas: 1200 },
+  mid: { pasir_halus: 1000, kerikil: 500, kain: 900 },
+  bottom: { kapas_arang: 2000, kapas: 1200, kerikil: 500 },
+} as const;
+
 /**
  * Evaluasi Rancangan Solusi (Tahap 5 Engineering)
- * Target: Kejernihan >= 85% dan Waktu <= 45 detik untuk 200 mL air keruh (120 NTU).
+ * Target: Kejernihan >= 85%, Waktu <= 45 detik, dan Estimasi Biaya Lokal <= Rp 5.500.
  */
 export function evaluateEngineeringDesign(
   atas: LayerTopId,
@@ -85,15 +94,26 @@ export function evaluateEngineeringDesign(
   skorKejernihan = Math.min(97, Math.round(skorKejernihan + (tebalCm - 4) * 1.4));
   const waktuDetik = Number((13 * hambatan).toFixed(1));
   const ntuHasil = Number((120 * (1 - skorKejernihan / 100)).toFixed(1));
+
+  const biayaEstimasi =
+    LAYER_COSTS.top[atas] +
+    LAYER_COSTS.mid[tengah] +
+    LAYER_COSTS.bottom[bawah] +
+    tebalCm * 150;
+  const hematBiaya = biayaEstimasi <= 5500;
   const lolos = skorKejernihan >= 85 && waktuDetik <= 45;
 
   return {
     kejernihan: skorKejernihan,
     waktuDetik,
     ntuHasil,
+    biayaEstimasi,
+    hematBiaya,
     lolos,
     catatan: lolos
-      ? 'Desain memenuhi syarat teknis! Susunan bertingkat dari pori besar ke kecil mampu menjernihkan air >= 85% dalam waktu <= 45 detik.'
+      ? hematBiaya
+        ? 'Desain lolos target teknis dan hemat biaya bahan lokal! Susunan bertingkat menjernihkan air >= 85% dalam <= 45 detik.'
+        : 'Desain lolos syarat kejernihan dan waktu, namun biaya bahan agak tinggi. Kurangi ketebalan bila ingin lebih hemat.'
       : skorKejernihan < 85
       ? 'Kejernihan belum mencapai 85%. Susun media secara bertingkat dari Kerikil (atas) -> Pasir Halus (tengah) -> Arang Aktif + Kapas (bawah).'
       : 'Air sudah jernih, namun waktu saring melewati batas 45 detik. Kurangi ketebalan total media agar laju filtrasi tetap praktis.',
@@ -120,6 +140,7 @@ export function getDefaultState(): AppState {
     maxUnlockedStage: 0,
     points: 0,
     completedStages: [],
+    soundEnabled: true,
     identitas: {
       nama: '',
       kelas: '',

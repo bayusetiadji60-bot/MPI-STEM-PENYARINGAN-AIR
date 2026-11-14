@@ -161,8 +161,8 @@ export function generateLkpdPdf(
   addSectionTitle('5. RANCANG SOLUSI (ENGINEERING)');
   addLabeledText('Nama Alat Rancangan', tahap5.namaAlat);
   addLabeledText(
-    'Susunan & Hasil Uji Desain',
-    `Atas: ${tahap5.lapisanAtas}, Tengah: ${tahap5.lapisanTengah}, Bawah: ${tahap5.lapisanBawah} (Tebal ${tahap5.tebalDesain} cm). Hasil: Kejernihan ${tahap5.hasilUji?.kejernihan ?? '-'}%, Waktu ${tahap5.hasilUji?.waktuDetik ?? '-'} detik (${tahap5.hasilUji?.lolos ? 'LOLOS TARGET' : 'BELUM LOLOS'}).`
+    'Susunan, Biaya & Hasil Uji Desain',
+    `Atas: ${tahap5.lapisanAtas}, Tengah: ${tahap5.lapisanTengah}, Bawah: ${tahap5.lapisanBawah} (Tebal ${tahap5.tebalDesain} cm). Estimasi Biaya: Rp ${(tahap5.hasilUji?.biayaEstimasi ?? 0).toLocaleString('id-ID')}. Hasil: Kejernihan ${tahap5.hasilUji?.kejernihan ?? '-'}%, Waktu ${tahap5.hasilUji?.waktuDetik ?? '-'} detik (${tahap5.hasilUji?.lolos ? 'LOLOS TARGET' : 'BELUM LOLOS'}).`
   );
   addLabeledText('Alasan Pemilihan Susunan', tahap5.alasan);
   addLabeledText('Prediksi & Evaluasi Penerapan', tahap5.prediksi);
@@ -175,6 +175,37 @@ export function generateLkpdPdf(
 
   addSectionTitle('7. RINGKASAN EVALUASI SINGKAT');
   addLabeledText('Skor Evaluasi Pilihan Ganda', `${tahap7.score} / 100`);
+
+  // Kotak Sertifikat Mini Peneliti Muda IPA
+  checkPageBreak(36);
+  doc.setFillColor(255, 251, 235);
+  doc.setDrawColor(217, 119, 6);
+  doc.roundedRect(margin, y, maxW, 30, 3, 3, 'FD');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10.5);
+  doc.setTextColor(146, 64, 14);
+  doc.text('SERTIFIKAT PENELITI MUDA IPA - SMP NEGERI 3 BESUKI', pageW / 2, y + 8, {
+    align: 'center',
+  });
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9.5);
+  doc.setTextColor(15, 23, 42);
+  doc.text(
+    pdfSafe(
+      `Diberikan kepada ${identitas.nama} (${identitas.kelas}) atas penyelesaian modul STEM Penyaringan Campuran`
+    ),
+    pageW / 2,
+    y + 16,
+    { align: 'center' }
+  );
+  doc.setFont('helvetica', 'bold');
+  doc.text(
+    pdfSafe(`Skor Evaluasi: ${tahap7.score}/100 | Total Poin: ${points} | Prototipe: ${tahap5.namaAlat}`),
+    pageW / 2,
+    y + 23.5,
+    { align: 'center' }
+  );
+  y += 34;
 
   const totalPages = doc.getNumberOfPages();
   for (let i = 1; i <= totalPages; i++) {

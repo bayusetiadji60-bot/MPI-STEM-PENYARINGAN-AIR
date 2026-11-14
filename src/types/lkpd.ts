@@ -44,6 +44,8 @@ export interface DesignTestResult {
   kejernihan: number;
   waktuDetik: number;
   ntuHasil: number;
+  biayaEstimasi: number;
+  hematBiaya: boolean;
   lolos: boolean;
   catatan: string;
 }
@@ -53,6 +55,7 @@ export interface AppState {
   maxUnlockedStage: number;
   points: number;
   completedStages: number[];
+  soundEnabled: boolean;
   identitas: {
     nama: string;
     kelas: string;

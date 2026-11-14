@@ -4,11 +4,12 @@ import {
   ArrowLeft,
   ArrowRight,
   Award,
+  Check,
   CheckCircle2,
   ClipboardCheck,
+  Copy,
   FileCheck2,
   FileDown,
-  FlaskConical,
   Home,
   Lightbulb,
   ShieldCheck,
@@ -28,8 +29,11 @@ import {
   isAllRequiredComplete,
 } from '../utils/filtrationModel';
 import { generateLkpdPdf } from '../utils/pdfExport';
+import { playErrorSound, playSuccessSound } from '../utils/soundEffects';
 import { AnalysisChart } from './AnalysisChart';
+import { BottleFilterBuilder } from './BottleFilterBuilder';
 import { IllustrationFrame } from './IllustrationFrame';
+import { MascotGuide } from './MascotGuide';
 
 interface StageCommonProps {
   state: AppState;
@@ -77,6 +81,11 @@ export const Stage5Rancang: React.FC<StageCommonProps> = ({
       ...prev,
       tahap5: { ...prev.tahap5, hasilUji: result },
     }));
+    if (result.lolos) {
+      playSuccessSound(state.soundEnabled);
+    } else {
+      playErrorSound(state.soundEnabled);
+    }
     onNotify(result.lolos ? 'Rancangan lolos kriteria target!' : 'Rancangan perlu penyesuaian');
   };
 
@@ -134,9 +143,13 @@ export const Stage5Rancang: React.FC<StageCommonProps> = ({
         </div>
       </div>
 
-      <div className="p-5 pt-4 sm:p-7 sm:pt-5">
+      <div className="space-y-5 p-5 pt-4 sm:p-7 sm:pt-5">
+      <MascotGuide
+        mood={tahap5.hasilUji?.lolos ? 'celebrate' : 'explain'}
+        message="Rancang botol penyaring air darurat dengan menyusun bahan dari pori besar di atas hingga halus di bawah. Perhatikan juga target biaya hemat warga maksimal Rp 5.500!"
+      />
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-12 lg:items-start">
-        <div className="space-y-4 lg:col-span-5">
+        <div className="space-y-4 lg:col-span-4">
           <IllustrationFrame
             src={engineeringPrototypeImg}
             alt="Ilustrasi prototipe penyaring air dari botol plastik berisi kerikil, pasir kasar, pasir halus, arang, dan kapas"
@@ -148,137 +161,47 @@ export const Stage5Rancang: React.FC<StageCommonProps> = ({
               <ShieldCheck className="h-4 w-4 text-amber-700" />
               <span>Kriteria Keberhasilan Desain</span>
             </div>
-            <ul className="mt-1.5 list-disc space-y-1 pl-5">
-              <li>Kejernihan hasil saringan minimal <strong>85%</strong> (kekeruhan akhir &le; 18 NTU).</li>
-              <li>Waktu penyaringan tidak lebih dari <strong>45 detik</strong> agar praktis digunakan warga.</li>
+            <ul className="mt-1.5 list-disc space-y-1 pl-5 text-xs sm:text-sm">
+              <li>Kejernihan hasil saringan minimal <strong>85%</strong> (&le; 18 NTU).</li>
+              <li>Waktu penyaringan maksimal <strong>45 detik</strong>.</li>
+              <li>Bonus STEM: Biaya bahan lokal hemat <strong>&le; Rp 5.500</strong>.</li>
             </ul>
           </div>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-gradient-to-br from-slate-50/75 via-white to-teal-50/35 p-4 lg:col-span-7">
-          <h3 className="text-sm font-bold text-slate-900">
-            Susun Lapisan Media Filter (Dari Atas ke Bawah)
-          </h3>
-        <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div>
-            <label htmlFor="selAtas" className="mb-1 block text-xs font-semibold text-slate-800">
-              Lapisan Atas (Pertama dilewati air)
-            </label>
-            <select
-              id="selAtas"
-              value={tahap5.lapisanAtas}
-              onChange={(e) =>
-                updateState((prev) => ({
-                  ...prev,
-                  tahap5: { ...prev.tahap5, lapisanAtas: e.target.value as LayerTopId },
-                }))
-              }
-              className="min-h-[44px] w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
-            >
-              <option value="kerikil">Kerikil Bersih (Pori Besar)</option>
-              <option value="pasir_kasar">Pasir Kasar (Pori Sedang)</option>
-              <option value="kapas">Kapas (Pori Halus)</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="selTengah" className="mb-1 block text-xs font-semibold text-slate-800">
-              Lapisan Tengah
-            </label>
-            <select
-              id="selTengah"
-              value={tahap5.lapisanTengah}
-              onChange={(e) =>
-                updateState((prev) => ({
-                  ...prev,
-                  tahap5: { ...prev.tahap5, lapisanTengah: e.target.value as LayerMidId },
-                }))
-              }
-              className="min-h-[44px] w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
-            >
-              <option value="pasir_halus">Pasir Halus</option>
-              <option value="kerikil">Kerikil</option>
-              <option value="kain">Kain Kasa</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="selBawah" className="mb-1 block text-xs font-semibold text-slate-800">
-              Lapisan Bawah (Penahan Akhir)
-            </label>
-            <select
-              id="selBawah"
-              value={tahap5.lapisanBawah}
-              onChange={(e) =>
-                updateState((prev) => ({
-                  ...prev,
-                  tahap5: { ...prev.tahap5, lapisanBawah: e.target.value as LayerBottomId },
-                }))
-              }
-              className="min-h-[44px] w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
-            >
-              <option value="kapas_arang">Arang Aktif + Kapas</option>
-              <option value="kapas">Kapas Saja</option>
-              <option value="kerikil">Kerikil Saja</option>
-            </select>
-          </div>
-
-          <div>
-            <div className="mb-1 flex items-center justify-between">
-              <label htmlFor="rngTebalDesain" className="text-xs font-semibold text-slate-800">
-                Ketebalan Total Media
-              </label>
-              <span className="font-mono-num rounded bg-teal-700 px-2 py-0.5 text-xs font-bold text-white">
-                {tahap5.tebalDesain} cm
-              </span>
-            </div>
-            <input
-              id="rngTebalDesain"
-              type="range"
-              min={4}
-              max={16}
-              step={2}
-              value={tahap5.tebalDesain}
-              onChange={(e) =>
-                updateState((prev) => ({
-                  ...prev,
-                  tahap5: { ...prev.tahap5, tebalDesain: Number(e.target.value) },
-                }))
-              }
-              className="mt-2 h-2 w-full cursor-pointer accent-teal-700"
-            />
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={handleTestDesign}
-          className="mt-4 inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700"
-        >
-          <FlaskConical className="h-4 w-4" />
-          Uji Rancangan Alat
-        </button>
-
-        {tahap5.hasilUji && (
-          <div
-            className={`mt-4 rounded-xl border p-3.5 text-sm ${
-              tahap5.hasilUji.lolos
-                ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
-                : 'border-red-200 bg-red-50 text-red-900'
-            }`}
-          >
-            <p className="font-bold">
-              {tahap5.hasilUji.lolos
-                ? 'LOLOS TARGET: Rancangan Memenuhi Syarat'
-                : 'PERLU PERBAIKAN DESAIN'}
-            </p>
-            <p className="font-mono-num mt-1 text-xs font-semibold">
-              Kejernihan: {tahap5.hasilUji.kejernihan}% ({tahap5.hasilUji.ntuHasil} NTU) · Waktu Saring:{' '}
-              {tahap5.hasilUji.waktuDetik} detik
-            </p>
-            <p className="mt-1 text-xs">{tahap5.hasilUji.catatan}</p>
-          </div>
-        )}
+        <div className="lg:col-span-8">
+          <BottleFilterBuilder
+            lapisanAtas={tahap5.lapisanAtas}
+            lapisanTengah={tahap5.lapisanTengah}
+            lapisanBawah={tahap5.lapisanBawah}
+            tebalDesain={tahap5.tebalDesain}
+            hasilUji={tahap5.hasilUji}
+            onChangeTop={(val: LayerTopId) =>
+              updateState((prev) => ({
+                ...prev,
+                tahap5: { ...prev.tahap5, lapisanAtas: val },
+              }))
+            }
+            onChangeMid={(val: LayerMidId) =>
+              updateState((prev) => ({
+                ...prev,
+                tahap5: { ...prev.tahap5, lapisanTengah: val },
+              }))
+            }
+            onChangeBottom={(val: LayerBottomId) =>
+              updateState((prev) => ({
+                ...prev,
+                tahap5: { ...prev.tahap5, lapisanBawah: val },
+              }))
+            }
+            onChangeThickness={(cm: number) =>
+              updateState((prev) => ({
+                ...prev,
+                tahap5: { ...prev.tahap5, tebalDesain: cm },
+              }))
+            }
+            onTestDesign={handleTestDesign}
+          />
         </div>
       </div>
 
@@ -571,6 +494,7 @@ export const Stage7Evaluasi: React.FC<StageCommonProps> = ({
       (q) => tahap7.answers[q.id] !== undefined
     );
     if (!allDone) {
+      playErrorSound(state.soundEnabled);
       setError('Jawab seluruh 5 soal evaluasi sebelum memeriksa skor.');
       return;
     }
@@ -582,6 +506,7 @@ export const Stage7Evaluasi: React.FC<StageCommonProps> = ({
     });
     const score = Math.round((benarCount / CURRICULUM_CONFIG.evaluasiSoal.length) * 100);
 
+    playSuccessSound(state.soundEnabled);
     updateState((prev) => ({
       ...prev,
       points: prev.points + Math.round(score / 5),
@@ -628,7 +553,17 @@ export const Stage7Evaluasi: React.FC<StageCommonProps> = ({
         </div>
       </div>
 
-      <div className="p-5 pt-4 sm:p-7 sm:pt-5">
+      <div className="space-y-4 p-5 pt-4 sm:p-7 sm:pt-5">
+      {tahap7.submitted && (
+        <MascotGuide
+          mood={tahap7.score >= 80 ? 'celebrate' : 'happy'}
+          message={
+            tahap7.score >= 80
+              ? `Hebat! Skor evaluasimu ${tahap7.score}/100. Kamu sudah menguasai konsep penyaringan campuran dan siap mencetak sertifikat serta laporan PDF!`
+              : `Skor evaluasimu ${tahap7.score}/100. Baca pembahasan setiap soal di bawah agar makin mantap sebelum mengunduh laporan.`
+          }
+        />
+      )}
       <div className="space-y-4">
         {CURRICULUM_CONFIG.evaluasiSoal.map((q) => {
           const chosen = tahap7.answers[q.id];
@@ -739,6 +674,7 @@ export const Stage8Rekap: React.FC<Omit<StageCommonProps, 'onNext' | 'updateStat
   onNotify,
 }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
+  const [copiedSummary, setCopiedSummary] = useState(false);
   const { identitas, tahap1, tahap3, tahap4, tahap5, tahap6, tahap7, points, completedStages } =
     state;
   const stats = getAnalysisStats(tahap3.percobaan);
@@ -746,8 +682,32 @@ export const Stage8Rekap: React.FC<Omit<StageCommonProps, 'onNext' | 'updateStat
 
   const handleDownloadPdf = () => {
     if (!canDownload) return;
+    playSuccessSound(state.soundEnabled);
     const filename = generateLkpdPdf(state, chartRef.current);
     onNotify(`PDF diunduh: ${filename}`);
+  };
+
+  const handleCopySummary = async () => {
+    const summaryText = [
+      `LAPORAN LKPD STEM · ${CURRICULUM_CONFIG.sekolah}`,
+      `Topik: ${CURRICULUM_CONFIG.topik}`,
+      `Nama: ${identitas.nama} (${identitas.kelas}, Absen ${identitas.absen})`,
+      `Tanggal: ${identitas.tanggal}`,
+      `Skor Evaluasi: ${tahap7.score}/100 | Total Poin: ${points}`,
+      `Percobaan Lab Maya: ${tahap3.percobaan.length} uji (Rata-rata laju ${stats.avgLaju} mL/s, kejernihan ${stats.avgJernih}%)`,
+      `Alat Rancangan: ${tahap5.namaAlat} (${tahap5.hasilUji?.kejernihan ?? '-'}% jernih, ${tahap5.hasilUji?.waktuDetik ?? '-'} detik)`,
+      `Kesimpulan: ${tahap6.kesimpulan}`,
+    ].join('\n');
+
+    try {
+      await navigator.clipboard.writeText(summaryText);
+      setCopiedSummary(true);
+      playSuccessSound(state.soundEnabled);
+      onNotify('Ringkasan disalin — siap ditempel di WhatsApp atau Google Classroom');
+      setTimeout(() => setCopiedSummary(false), 2500);
+    } catch {
+      onNotify('Gagal menyalin otomatis. Gunakan tombol Unduh PDF.');
+    }
   };
 
   return (
@@ -766,24 +726,50 @@ export const Stage8Rekap: React.FC<Omit<StageCommonProps, 'onNext' | 'updateStat
               Rekap Hasil Belajar {identitas.nama}
             </h2>
             <p className="mt-1 text-sm text-slate-600">
-              Periksa kembali seluruh jawabanmu, lalu klik tombol <strong>Unduh Laporan LKPD (PDF)</strong> untuk dikumpulkan ke guru IPA.
+              Selamat menyelesaikan seluruh alur STEM! Unduh laporan PDF atau salin ringkasan untuk dikirim ke grup kelas / Google Classroom.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="p-5 pt-4 sm:p-7 sm:pt-5">
+      <div className="space-y-5 p-5 pt-4 sm:p-7 sm:pt-5">
+      <MascotGuide
+        mood="celebrate"
+        message={`Luar biasa, ${identitas.nama || 'Peneliti Muda'}! Kamu telah menyelesaikan seluruh eksperimen Lab Maya dan merancang alat penjernih air "${tahap5.namaAlat || 'Filter Besuki'}".`}
+      />
 
-      {/* Lencana Pencapaian */}
-      <div className="mt-4 flex flex-wrap items-center gap-2 text-xs font-medium text-slate-700">
-        <Award className="h-4 w-4 text-amber-600" />
-        <span>Lencana diperoleh:</span>
-        <span>
+      {/* Sertifikat Mini Peneliti Muda IPA */}
+      <div className="rounded-2xl border-2 border-amber-300 bg-gradient-to-br from-amber-50/80 via-white to-teal-50/70 p-5 text-center">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-amber-700">
+          <Award className="h-7 w-7" />
+        </div>
+        <p className="mt-2 text-xs font-bold tracking-wider text-amber-800 uppercase">
+          Sertifikat Apresiasi Peneliti Muda IPA
+        </p>
+        <h3 className="mt-1 text-xl font-extrabold text-slate-900 sm:text-2xl">
+          {identitas.nama || 'Siswa SMP Negeri 3 Besuki'}
+        </h3>
+        <p className="text-xs font-medium text-slate-600">
+          Kelas {identitas.kelas || '-'} · No. Absen {identitas.absen || '-'} · {CURRICULUM_CONFIG.sekolah}
+        </p>
+        <p className="mx-auto mt-2.5 max-w-xl text-xs leading-relaxed text-slate-700 sm:text-sm">
+          Telah menuntaskan penyelidikan STEM + Lab Maya topik{' '}
+          <strong>{CURRICULUM_CONFIG.topik}</strong> dengan prototipe alat{' '}
+          <strong>{tahap5.namaAlat || '-'}</strong>.
+        </p>
+        <div className="font-mono-num mt-3 flex flex-wrap justify-center gap-4 text-xs font-bold text-teal-900">
+          <span>Skor Evaluasi: {tahap7.score}/100</span>
+          <span>·</span>
+          <span>Total Poin: {points}</span>
+          <span>·</span>
+          <span>Lencana: {completedStages.length}/{CURRICULUM_CONFIG.tahapan.length}</span>
+        </div>
+        <p className="mt-2.5 text-[11px] font-medium text-slate-600">
           {completedStages
             .map((sid) => CURRICULUM_CONFIG.tahapan[sid]?.badge)
             .filter(Boolean)
             .join(' · ')}
-        </span>
+        </p>
       </div>
 
       <div className="mt-5 space-y-5 divide-y divide-slate-200">
@@ -904,17 +890,36 @@ export const Stage8Rekap: React.FC<Omit<StageCommonProps, 'onNext' | 'updateStat
         </div>
       </div>
 
-      {/* Tombol Unduh PDF */}
+      {/* Tombol Unduh PDF & Salin Ringkasan */}
       <div className="mt-7 rounded-xl border border-teal-200 bg-gradient-to-br from-teal-50/80 via-white to-sky-50/60 p-5 text-center">
-        <button
-          type="button"
-          disabled={!canDownload}
-          onClick={handleDownloadPdf}
-          className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-teal-700 to-sky-700 px-6 py-3 text-base font-bold text-white shadow-sm hover:from-teal-800 hover:to-sky-800 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          <FileDown className="h-5 w-5" />
-          Unduh Laporan LKPD (PDF)
-        </button>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <button
+            type="button"
+            disabled={!canDownload}
+            onClick={handleDownloadPdf}
+            className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-teal-700 to-sky-700 px-6 py-3 text-base font-bold text-white shadow-sm hover:from-teal-800 hover:to-sky-800 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <FileDown className="h-5 w-5" />
+            Unduh Laporan LKPD (PDF)
+          </button>
+          <button
+            type="button"
+            onClick={handleCopySummary}
+            className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl border border-teal-700 bg-white px-5 py-3 text-sm font-bold text-teal-800 hover:bg-teal-50"
+          >
+            {copiedSummary ? (
+              <>
+                <Check className="h-4 w-4 text-emerald-700" />
+                Ringkasan Tersalin!
+              </>
+            ) : (
+              <>
+                <Copy className="h-4 w-4" />
+                Salin Ringkasan (WA / Classroom)
+              </>
+            )}
+          </button>
+        </div>
         {!canDownload && (
           <p className="mt-2 text-xs font-semibold text-red-700">
             Lengkapi semua isian wajib di tahap sebelumnya untuk mengaktifkan unduhan PDF.

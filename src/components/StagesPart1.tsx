@@ -14,6 +14,7 @@ import {
   FlaskConical,
   HelpCircle,
   Layers,
+  Microscope,
   SlidersHorizontal,
   Target,
   Trash2,
@@ -25,10 +26,13 @@ import heroWaterFiltrationImg from '../assets/images/hero_water_filtration_17946
 import sceneBesukiRainImg from '../assets/images/scene_besuki_rain_1794640167145.jpg';
 import { AppState, LabTrial } from '../types/lkpd';
 import { getAnalysisStats } from '../utils/filtrationModel';
+import { playErrorSound, playSuccessSound } from '../utils/soundEffects';
 import { AnalysisChart } from './AnalysisChart';
 import { FiltrationProcessSvg } from './FiltrationProcessSvg';
 import { IllustrationFrame } from './IllustrationFrame';
 import { LabMayaCanvas } from './LabMayaCanvas';
+import { MascotGuide } from './MascotGuide';
+import { MicroscopeZoomView } from './MicroscopeZoomView';
 import { PhenomenonIllustration } from './PhenomenonIllustration';
 import { ProblemVideoPlayer } from './ProblemVideoPlayer';
 
@@ -108,7 +112,11 @@ export const Stage0Identitas: React.FC<StageCommonProps> = ({
         </div>
       </div>
 
-      <div className="p-5 pt-4 sm:p-7 sm:pt-5">
+      <div className="space-y-5 p-5 pt-4 sm:p-7 sm:pt-5">
+        <MascotGuide
+          mood="happy"
+          message="Halo, aku Kak Saka! Isi nama lengkap, kelas, dan nomor absenmu terlebih dahulu agar seluruh hasil penyelidikan dan sertifikat akhir tercatat atas namamu."
+        />
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-12 lg:items-stretch">
           <div className="rounded-xl border border-teal-200/80 bg-gradient-to-br from-teal-50/75 via-white to-sky-50/60 p-4 lg:col-span-6">
             <div className="flex items-center gap-2 text-teal-900">
@@ -286,6 +294,10 @@ export const Stage1Masalah: React.FC<StageCommonProps> = ({
       </div>
 
       <div className="space-y-5 p-5 pt-4 sm:p-7 sm:pt-5">
+      <MascotGuide
+        mood="curious"
+        message="Putar video ilustrasi masalah atau bandingkan kondisi cuaca normal dan hujan deras, lalu tuliskan pertanyaan ilmiah serta dugaan awalmu di bawah!"
+      />
       <ProblemVideoPlayer />
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-stretch">
         <IllustrationFrame
@@ -448,10 +460,19 @@ export const Stage2Konsep: React.FC<StageCommonProps> = ({
       (q) => tahap2.miniQuizAns[q.id] !== undefined
     );
     if (!allAnswered) {
+      playErrorSound(state.soundEnabled);
       setError('Pilih jawaban untuk seluruh 3 soal mini-kuis terlebih dahulu.');
       return;
     }
     setError(null);
+    const allCorrect = CURRICULUM_CONFIG.miniQuiz.every(
+      (q) => Number(tahap2.miniQuizAns[q.id]) === q.benar
+    );
+    if (allCorrect) {
+      playSuccessSound(state.soundEnabled);
+    } else {
+      playErrorSound(state.soundEnabled);
+    }
     updateState((prev) => ({
       ...prev,
       tahap2: { ...prev.tahap2, miniQuizChecked: true },
@@ -552,6 +573,17 @@ export const Stage2Konsep: React.FC<StageCommonProps> = ({
       {/* Diagram SVG Interaktif Proses Penyaringan */}
       <div className="mt-5">
         <FiltrationProcessSvg />
+      </div>
+
+      {/* Kaca Pembesar Mikroskopis */}
+      <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50/70 p-4">
+        <div className="mb-3 flex items-center gap-2 text-slate-900">
+          <Microscope className="h-4 w-4 text-teal-700" />
+          <h3 className="text-sm font-bold">
+            Kaca Pembesar Mikroskopis: Mengapa Air Lumpur Tersaring tetapi Air Garam Lolos?
+          </h3>
+        </div>
+        <MicroscopeZoomView />
       </div>
 
       {/* Ringkasan Materi Inti */}
@@ -765,12 +797,17 @@ export const Stage3LabMaya: React.FC<StageCommonProps> = ({
         </div>
       </div>
 
-      <div className="p-5 pt-4 sm:p-7 sm:pt-5">
+      <div className="space-y-5 p-5 pt-4 sm:p-7 sm:pt-5">
+      <MascotGuide
+        mood="explain"
+        message="Di Lab Maya kamu bisa mencoba Mode Bandingkan 2 Filter sekaligus, menguji efek penyumbatan lumpur (+1 Siklus), atau membuka Kaca Pembesar Mikroskopis. Jangan lupa rekam minimal 3 data percobaan!"
+      />
       <div>
         <LabMayaCanvas
           selectedMedia={tahap3.selectedMedia}
           ketebalan={tahap3.ketebalan}
           kekeruhanAwal={tahap3.kekeruhanAwal}
+          soundEnabled={state.soundEnabled}
           onMediaChange={(media) =>
             updateState((prev) => ({
               ...prev,
@@ -1022,6 +1059,11 @@ export const Stage4Analisis: React.FC<StageCommonProps> = ({
         cekHitungOk: okLaju && okJernih,
       },
     }));
+    if (okLaju && okJernih) {
+      playSuccessSound(state.soundEnabled);
+    } else {
+      playErrorSound(state.soundEnabled);
+    }
     onNotify('Perhitungan rata-rata diperiksa');
   };
 
@@ -1069,7 +1111,11 @@ export const Stage4Analisis: React.FC<StageCommonProps> = ({
         </div>
       </div>
 
-      <div className="p-5 pt-4 sm:p-7 sm:pt-5">
+      <div className="space-y-5 p-5 pt-4 sm:p-7 sm:pt-5">
+      <MascotGuide
+        mood="explain"
+        message="Perhatikan grafik batang otomatis di bawah: periksa bagaimana batang biru (kejernihan) dan batang oranye (laju aliran) bergerak berlawanan saat pori makin kecil!"
+      />
       <div className="rounded-xl border border-sky-200/80 bg-gradient-to-br from-sky-50/70 via-white to-teal-50/50 p-4 text-sm text-slate-700">
         <div className="flex items-center gap-2 font-semibold text-slate-900">
           <Calculator className="h-4 w-4 text-sky-700" />
